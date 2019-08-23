@@ -6,17 +6,19 @@ lazy val effVersion = "5.5.0"
 
 lazy val zioLib = "dev.zio" %% "zio" % zioVersion
 lazy val effLib = "org.atnos" %% "eff" % effVersion
+lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 
 lazy val zio = crossProject(JSPlatform, JVMPlatform).in(file("zio"))
   .settings(
     scalacOptions ++= commonScalacOptions.value,
+    (scalacOptions in Test) ~= (_.filterNot(_ == "-Xfatal-warnings")),
     addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
     libraryDependencies ++= Seq(
       effLib,
-      zioLib
+      zioLib,
+      scalaTest
     )
 )
-
 
 lazy val commonScalacOptions = Def.setting {
   Seq(
