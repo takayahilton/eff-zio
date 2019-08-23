@@ -1,5 +1,7 @@
-import org.scalajs.jsenv.nodejs._
 import sbtcrossproject.CrossPlugin.autoImport.crossProject
+
+scalaVersion in ThisBuild       := "2.12.9"
+crossScalaVersions in ThisBuild := Seq("2.12.9", "2.11.12")
 
 lazy val zioVersion = "1.0.0-RC10-1"
 lazy val effVersion = "5.5.0"
