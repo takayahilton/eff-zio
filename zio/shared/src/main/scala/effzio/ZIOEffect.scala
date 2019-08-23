@@ -76,11 +76,13 @@ trait ZIOInterpretation {
   import interpret.of
 
   def either[R, ENV, E, A](e: Eff[R, A])(implicit zio: ZIO[ENV, E, ?] /= R): Eff[R, E Either A] =
-    interpret.interceptNatM[R, ZIO[ENV, E, ?], E Either ?, A](e,
+    interpret.interceptNatM[R, ZIO[ENV, E, ?], E Either ?, A](
+      e,
       new (ZIO[ENV, E, ?] ~> (ZIO[ENV, E, ?] of (E Either ?))#l) {
         def apply[X](fa: ZIO[ENV, E, X]): ZIO[ENV, E, E Either X] =
           fa.either
-      })
+      }
+    )
 }
 
 object ZIOInterpretation extends ZIOInterpretation

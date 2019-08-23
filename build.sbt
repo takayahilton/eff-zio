@@ -4,8 +4,8 @@ import sbtcrossproject.CrossPlugin.autoImport.crossProject
 lazy val zioVersion = "1.0.0-RC10-1"
 lazy val effVersion = "5.5.0"
 
-lazy val zioLib = "dev.zio" %% "zio" % zioVersion
-lazy val effLib = "org.atnos" %% "eff" % effVersion
+lazy val zioLib = "dev.zio"          %% "zio"       % zioVersion
+lazy val effLib = "org.atnos"        %% "eff"       % effVersion
 lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 
 lazy val zio = crossProject(JSPlatform, JVMPlatform)
