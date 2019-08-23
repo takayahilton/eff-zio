@@ -8,8 +8,10 @@ lazy val zioLib = "dev.zio" %% "zio" % zioVersion
 lazy val effLib = "org.atnos" %% "eff" % effVersion
 lazy val scalaTest = "org.scalatest" %% "scalatest" % "3.0.8" % "test"
 
-lazy val zio = crossProject(JSPlatform, JVMPlatform).in(file("zio"))
+lazy val zio = crossProject(JSPlatform, JVMPlatform)
+  .in(file("zio"))
   .settings(
+    scalafmtOnCompile := true,
     scalacOptions ++= commonScalacOptions.value,
     (scalacOptions in Test) ~= (_.filterNot(_ == "-Xfatal-warnings")),
     addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
@@ -18,12 +20,13 @@ lazy val zio = crossProject(JSPlatform, JVMPlatform).in(file("zio"))
       zioLib,
       scalaTest
     )
-)
+  )
 
 lazy val commonScalacOptions = Def.setting {
   Seq(
     "-deprecation",
-    "-encoding", "UTF-8",
+    "-encoding",
+    "UTF-8",
     "-feature",
     "-language:_",
     "-unchecked",
@@ -47,3 +50,6 @@ lazy val commonScalacOptions = Def.setting {
     }
   }
 }
+
+addCommandAlias("check", ";scalafmtCheckAll;scalafmtSbtCheck")
+addCommandAlias("fmt", ";scalafmtAll;scalafmtSbt")
