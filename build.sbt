@@ -45,10 +45,12 @@ lazy val sharedSettings = Seq(
 )
 
 val publishingSettings = Seq(
-  name                    := "eff-zio",
-  organization            := "com.github.takayahilton",
-  publishMavenStyle       := true,
-  publishArtifact in Test := false,
+  name                      := "eff-zio",
+  organization              := "com.github.takayahilton",
+  publishConfiguration      := publishConfiguration.value.withOverwrite(true),
+  publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true),
+  publishMavenStyle         := true,
+  publishArtifact in Test   := false,
   pomIncludeRepository := { _ =>
     false
   },
