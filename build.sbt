@@ -4,6 +4,7 @@ name                            := "eff-zio"
 organization                    := "com.github.takayahilton"
 scalaVersion in ThisBuild       := "2.12.9"
 crossScalaVersions in ThisBuild := Seq("2.12.9", "2.11.12")
+version in ThisBuild := "0.1-SNAPSHOT"
 
 lazy val commonScalacOptions = Def.setting {
   Seq(
@@ -40,7 +41,7 @@ lazy val sharedSettings = Seq(
   (scalacOptions in Test) ~= (_.filterNot(_ == "-Xfatal-warnings")),
   addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
   libraryDependencies ++= Seq(
-    "dev.zio"       %%% "zio"       % "1.0.0-RC10-1",
+    "dev.zio"       %%% "zio"       % "1.0.0-RC11-1",
     "org.atnos"     %%% "eff"       % "5.5.0",
     "org.scalatest" %%% "scalatest" % "3.0.8" % "test"
   )
@@ -52,13 +53,12 @@ lazy val publishingSettings = Seq(
   pomIncludeRepository := { _ =>
     false
   },
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
+  publishTo := Some(
     if (isSnapshot.value)
-      Some("snapshots" at nexus + "content/repositories/snapshots")
+      Opts.resolver.sonatypeSnapshots
     else
-      Some("releases" at nexus + "service/local/staging/deploy/maven2")
-  },
+      Opts.resolver.sonatypeStaging
+  ),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
   scmInfo := Some(
     ScmInfo(
@@ -76,8 +76,8 @@ lazy val publishingSettings = Seq(
   )
 )
 
-lazy val zio = crossProject(JSPlatform, JVMPlatform)
-  .in(file("zio"))
+lazy val `eff-zio` = crossProject(JSPlatform, JVMPlatform)
+  .in(file("."))
   .settings(sharedSettings)
   .settings(publishingSettings)
 

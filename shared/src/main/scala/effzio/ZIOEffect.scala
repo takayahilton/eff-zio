@@ -41,10 +41,11 @@ trait ZIOInterpretation {
 
     override final def pure[A](x: A): ZIO[R, E, A] = ZIO.succeed(x)
 
-    override final def tailRecM[A, B](a: A)(f: A => ZIO[R, E, Either[A, B]]): ZIO[R, E, B] = ZIO.suspend(f(a)).flatMap {
-      case Left(l)  => tailRecM(l)(f)
-      case Right(r) => ZIO.succeed(r)
-    }
+    override final def tailRecM[A, B](a: A)(f: A => ZIO[R, E, Either[A, B]]): ZIO[R, E, B] =
+      ZIO.effectSuspendTotal(f(a)).flatMap {
+        case Left(l)  => tailRecM(l)(f)
+        case Right(r) => ZIO.succeed(r)
+      }
   }
 
   private def zioApplicative[R, E]: CommutativeApplicative[ZIO[R, E, ?]] = new CommutativeApplicative[ZIO[R, E, ?]] {
