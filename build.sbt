@@ -1,7 +1,5 @@
-import sbtcrossproject.CrossPlugin.autoImport.crossProject
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-name                            := "eff-zio"
-organization                    := "com.github.takayahilton"
 scalaVersion in ThisBuild       := "2.12.9"
 crossScalaVersions in ThisBuild := Seq("2.12.9", "2.11.12")
 
@@ -46,13 +44,15 @@ lazy val sharedSettings = Seq(
   )
 )
 
-lazy val publishingSettings = Seq(
-  publishMavenStyle       := true,
-  publishArtifact in Test := false,
+val publishingSettings = Seq(
+  name                      := "eff-zio",
+  organization in ThisBuild := "com.github.takayahilton",
+  publishMavenStyle         := true,
+  publishArtifact in Test   := false,
   pomIncludeRepository := { _ =>
     false
   },
-  publishTo := Some(
+  publishTo in ThisBuild := Some(
     if (isSnapshot.value)
       Opts.resolver.sonatypeSnapshots
     else
@@ -76,6 +76,7 @@ lazy val publishingSettings = Seq(
 )
 
 lazy val `eff-zio` = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Full)
   .in(file("."))
   .settings(sharedSettings)
   .settings(publishingSettings)
