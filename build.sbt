@@ -4,7 +4,6 @@ name                            := "eff-zio"
 organization                    := "com.github.takayahilton"
 scalaVersion in ThisBuild       := "2.12.9"
 crossScalaVersions in ThisBuild := Seq("2.12.9", "2.11.12")
-version in ThisBuild := "0.1-SNAPSHOT"
 
 lazy val commonScalacOptions = Def.setting {
   Seq(
