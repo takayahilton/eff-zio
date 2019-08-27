@@ -2,6 +2,8 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 scalaVersion in ThisBuild       := "2.12.9"
 crossScalaVersions in ThisBuild := Seq("2.12.9", "2.11.12")
+publishConfiguration := publishConfiguration.value.withOverwrite(true)
+publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(true)
 
 lazy val commonScalacOptions = Def.setting {
   Seq(
