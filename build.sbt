@@ -81,5 +81,24 @@ lazy val `eff-zio` = crossProject(JSPlatform, JVMPlatform)
   .settings(sharedSettings)
   .settings(publishingSettings)
 
+import ReleaseTransformations._
+
+releaseCrossBuild := true
+releaseProcess := Seq[ReleaseStep](
+  checkSnapshotDependencies,
+  inquireVersions,
+  runClean,
+  runTest,
+  setReleaseVersion,
+  commitReleaseVersion,
+  tagRelease,
+  // For non cross-build projects, use releaseStepCommand("publishSigned")
+  releaseStepCommandAndRemaining("+publishSigned"),
+  setNextVersion,
+  commitNextVersion,
+  releaseStepCommand("sonatypeReleaseAll"),
+  pushChanges
+)
+
 addCommandAlias("check", ";scalafmtCheckAll;scalafmtSbtCheck")
 addCommandAlias("fmt", ";scalafmtAll;scalafmtSbt")
