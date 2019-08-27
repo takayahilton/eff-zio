@@ -2,8 +2,6 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 scalaVersion in ThisBuild       := "2.12.9"
 crossScalaVersions in ThisBuild := Seq("2.12.9", "2.11.12")
-publishConfiguration            := publishConfiguration.value.withOverwrite(true)
-publishLocalConfiguration       := publishLocalConfiguration.value.withOverwrite(true)
 
 lazy val commonScalacOptions = Def.setting {
   Seq(
@@ -47,10 +45,12 @@ lazy val sharedSettings = Seq(
 )
 
 val publishingSettings = Seq(
-  name                      := "eff-zio",
-  organization in ThisBuild := "com.github.takayahilton",
-  publishMavenStyle         := true,
-  publishArtifact in Test   := false,
+  name                                   := "eff-zio",
+  organization in ThisBuild              := "com.github.takayahilton",
+  publishConfiguration in ThisBuild      := publishConfiguration.value.withOverwrite(true),
+  publishLocalConfiguration in ThisBuild := publishLocalConfiguration.value.withOverwrite(true),
+  publishMavenStyle                      := true,
+  publishArtifact in Test                := false,
   pomIncludeRepository := { _ =>
     false
   },
