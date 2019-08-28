@@ -7,6 +7,7 @@ crossScalaVersions in ThisBuild := Seq("2.12.9", "2.11.12")
 lazy val root = project
   .in(file("."))
   .settings(moduleName := "root")
+  .settings(publishingSettings)
   .settings(noPublishSettings)
   .aggregate(eff_zioJVM, eff_zioJS)
   .dependsOn(eff_zioJVM, eff_zioJS)
@@ -16,7 +17,7 @@ lazy val eff_zio = crossProject(JSPlatform, JVMPlatform)
   .in(file("."))
   .settings(moduleName := "eff-zio")
   .settings(sharedSettings)
-  .settings(publishingSettings ++ sharedReleaseProcess)
+  .settings(publishingSettings)
 
 lazy val eff_zioJVM = eff_zio.jvm
 lazy val eff_zioJS = eff_zio.js
@@ -62,7 +63,7 @@ lazy val sharedSettings = Seq(
   )
 )
 
-val publishingSettings = Seq(
+lazy val publishingSettings = Seq(
   name                    := "eff_zio",
   organization            := "com.github.takayahilton",
   publishMavenStyle       := true,
@@ -92,9 +93,9 @@ val publishingSettings = Seq(
       url = url("https://github.com/takayahilton")
     )
   )
-)
+) ++ sharedReleaseProcess
 
-val sharedReleaseProcess = Seq(
+lazy val sharedReleaseProcess = Seq(
   releaseProcess := Seq[ReleaseStep](
     checkSnapshotDependencies,
     inquireVersions,
