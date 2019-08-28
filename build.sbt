@@ -1,7 +1,24 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
+import ReleaseTransformations._
 
 scalaVersion in ThisBuild       := "2.12.9"
 crossScalaVersions in ThisBuild := Seq("2.12.9", "2.11.12")
+
+lazy val root = project.in(file("."))
+  .settings(moduleName := "root")
+  .settings(noPublishSettings)
+  .aggregate(eff_zioJVM, eff_zioJS)
+  .dependsOn(eff_zioJVM, eff_zioJS)
+
+lazy val eff_zio = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Full)
+  .in(file("."))
+  .settings(moduleName := "eff-zio")
+  .settings(sharedSettings)
+  .settings(publishingSettings ++ sharedReleaseProcess)
+
+lazy val eff_zioJVM = eff_zio.jvm
+lazy val eff_zioJS = eff_zio.js
 
 lazy val commonScalacOptions = Def.setting {
   Seq(
@@ -45,7 +62,7 @@ lazy val sharedSettings = Seq(
 )
 
 val publishingSettings = Seq(
-  name                    := "eff-zio",
+  name                    := "eff_zio",
   organization            := "com.github.takayahilton",
   publishMavenStyle       := true,
   publishArtifact in Test := false,
@@ -76,28 +93,28 @@ val publishingSettings = Seq(
   )
 )
 
-lazy val `eff-zio` = crossProject(JSPlatform, JVMPlatform)
-  .crossType(CrossType.Full)
-  .in(file("."))
-  .settings(sharedSettings)
-  .settings(publishingSettings)
+val sharedReleaseProcess = Seq(
+  releaseProcess := Seq[ReleaseStep](
+    checkSnapshotDependencies,
+    inquireVersions,
+    runClean,
+    releaseStepCommandAndRemaining("check"),
+    runTest,
+    setReleaseVersion,
+    commitReleaseVersion,
+    tagRelease,
+    releaseStepCommandAndRemaining("+publishSigned"),
+    setNextVersion,
+    commitNextVersion,
+    releaseStepCommand("sonatypeReleaseAll"),
+    pushChanges
+  )
+)
 
-import ReleaseTransformations._
-
-releaseCrossBuild := true
-releaseProcess := Seq[ReleaseStep](
-  checkSnapshotDependencies,
-  inquireVersions,
-  runClean,
-  runTest,
-  setReleaseVersion,
-  commitReleaseVersion,
-  tagRelease,
-  releaseStepCommandAndRemaining("+publishSigned"),
-  setNextVersion,
-  commitNextVersion,
-  releaseStepCommand("sonatypeReleaseAll"),
-  pushChanges
+lazy val noPublishSettings = Seq(
+  publish := {},
+  publishLocal := {},
+  publishArtifact := false
 )
 
 addCommandAlias("check", ";scalafmtCheckAll;scalafmtSbtCheck")
