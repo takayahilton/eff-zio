@@ -22,6 +22,12 @@ scalaOrganization in ThisBuild := "org.typelevel"
 # Usage
 
 ```scala
+import com.github.takayahilton.eff.zio._
+import org.atnos.eff._
+import org.atnos.eff.all._
+import org.atnos.eff.syntax.all._
+import zio.{DefaultRuntime, UIO}
+
 object Runtime extends DefaultRuntime
 
 type S1 = Fx.fx2[UIO, Option]
@@ -32,7 +38,7 @@ def action[R: _uio: _option]: Eff[R, Int] =
     b <- succeedLazy(20)
   } yield a + b
 
-val zio = action[S1].runOption.runSequential
+val zio = action[S1].runOption.runAsync
 
-Runtime.unsafeRun(zio)// Some(30)
+Runtime.unsafeRun(zio) //Some(30)
 ```
