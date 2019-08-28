@@ -1,4 +1,6 @@
 # eff-zio 
+[![Build Status](https://travis-ci.org/takayahilton/eff-zio.png?branch=master)](https://travis-ci.org/takayahilton/eff-zio)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.takayahilton/eff-zio_2.12.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.takayahilton/eff-zio_2.12)
 
 This library is [eff](https://github.com/atnos-org/eff) extension for [ZIO](https://github.com/zio/zio) effects.
 
