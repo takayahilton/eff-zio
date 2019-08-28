@@ -3,6 +3,7 @@ import ReleaseTransformations._
 
 scalaVersion in ThisBuild       := "2.12.9"
 crossScalaVersions in ThisBuild := Seq("2.12.9", "2.11.12")
+organization in ThisBuild       := "com.github.takayahilton"
 
 lazy val root = project
   .in(file("."))
@@ -64,8 +65,6 @@ lazy val sharedSettings = Seq(
 )
 
 lazy val publishingSettings = Seq(
-  name                    := "eff_zio",
-  organization            := "com.github.takayahilton",
   publishMavenStyle       := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { _ =>
