@@ -1,4 +1,4 @@
-package effzio
+package com.github.takayahilton.eff.zio
 
 import org.scalatest.{FunSuite, Matchers}
 import org.atnos.eff._

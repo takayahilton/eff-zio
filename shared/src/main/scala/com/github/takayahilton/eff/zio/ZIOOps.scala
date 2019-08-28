@@ -1,4 +1,4 @@
-package effzio
+package com.github.takayahilton.eff.zio
 
 import org.atnos.eff._
 import zio.ZIO

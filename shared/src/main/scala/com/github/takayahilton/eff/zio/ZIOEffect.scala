@@ -1,4 +1,4 @@
-package effzio
+package com.github.takayahilton.eff.zio
 
 import cats._
 import cats.instances.either._
