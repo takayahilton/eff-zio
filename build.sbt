@@ -59,6 +59,7 @@ val publishingSettings = Seq(
       Opts.resolver.sonatypeStaging
   ),
   licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+  homepage := Some(url("https://github.com/takayahilton/eff-zio")),
   scmInfo := Some(
     ScmInfo(
       url("https://github.com/takayahilton/eff-zio"),
