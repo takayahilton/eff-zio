@@ -4,7 +4,8 @@ import ReleaseTransformations._
 scalaVersion in ThisBuild       := "2.12.9"
 crossScalaVersions in ThisBuild := Seq("2.12.9", "2.11.12")
 
-lazy val root = project.in(file("."))
+lazy val root = project
+  .in(file("."))
   .settings(moduleName := "root")
   .settings(noPublishSettings)
   .aggregate(eff_zioJVM, eff_zioJS)
@@ -112,8 +113,8 @@ val sharedReleaseProcess = Seq(
 )
 
 lazy val noPublishSettings = Seq(
-  publish := {},
-  publishLocal := {},
+  publish         := {},
+  publishLocal    := {},
   publishArtifact := false
 )
 
