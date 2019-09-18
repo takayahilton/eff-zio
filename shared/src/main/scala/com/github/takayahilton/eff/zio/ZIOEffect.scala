@@ -22,8 +22,8 @@ trait ZIOCreation extends ZIOTypes {
   final def fromZIO[R, ENV, E, A](zio: ZIO[ENV, E, A])(implicit member: ZIO[ENV, E, ?] |= R): Eff[R, A] =
     send[ZIO[ENV, E, ?], R, A](zio)
 
-  final def succeedLazy[R, A](a: => A)(implicit member: UIO |= R): Eff[R, A] =
-    fromZIO(ZIO.succeedLazy(a))
+  final def effectTotal[R, A](a: => A)(implicit member: UIO |= R): Eff[R, A] =
+    fromZIO(ZIO.effectTotal(a))
 
   final def effect[R, A](a: => A)(implicit member: Task |= R): Eff[R, A] =
     fromZIO(ZIO.effect(a))
