@@ -15,8 +15,8 @@ class ZIOEffectSpec extends FunSuite with Matchers {
 
     def action[R: _uio: _option]: Eff[R, Int] =
       for {
-        a <- succeedLazy(10)
-        b <- succeedLazy(20)
+        a <- effectTotal(10)
+        b <- effectTotal(20)
       } yield a + b
 
     val zio = action[S1].runOption.runSequential
