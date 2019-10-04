@@ -2,8 +2,9 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import ReleaseTransformations._
 
 scalaVersion in ThisBuild       := "2.12.10"
-crossScalaVersions in ThisBuild := Seq("2.11.12", scalaVersion.value, "2.13.0")
+crossScalaVersions in ThisBuild := Seq("2.11.12", scalaVersion.value, "2.13.1")
 organization in ThisBuild       := "com.github.takayahilton"
+onChangedBuildSource in Global  := IgnoreSourceChanges
 
 lazy val root = project
   .in(file("."))
@@ -58,8 +59,8 @@ lazy val sharedSettings = Seq(
   (scalacOptions in Test) ~= (_.filterNot(_ == "-Xfatal-warnings")),
   addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
   libraryDependencies ++= Seq(
-    "dev.zio"       %%% "zio"       % "1.0.0-RC12-1",
-    "org.atnos"     %%% "eff"       % "5.5.1",
+    "dev.zio"       %%% "zio"       % "1.0.0-RC13",
+    "org.atnos"     %%% "eff"       % "5.5.2",
     "org.scalatest" %%% "scalatest" % "3.0.8" % "test"
   )
 )
