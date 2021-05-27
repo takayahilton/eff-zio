@@ -1,10 +1,10 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import ReleaseTransformations._
 
-scalaVersion in ThisBuild       := "2.12.10"
-crossScalaVersions in ThisBuild := Seq("2.11.12", scalaVersion.value, "2.13.1")
-organization in ThisBuild       := "com.github.takayahilton"
-onChangedBuildSource in Global  := IgnoreSourceChanges
+ThisBuild / scalaVersion := "2.12.10"
+ThisBuild / crossScalaVersions := Seq("2.11.12", scalaVersion.value, "2.13.1")
+ThisBuild / organization := "com.github.takayahilton"
+Global / onChangedBuildSource := IgnoreSourceChanges
 
 lazy val root = project
   .in(file("."))
@@ -56,7 +56,7 @@ lazy val commonScalacOptions = Def.setting {
 lazy val sharedSettings = Seq(
   scalafmtOnCompile := true,
   scalacOptions ++= commonScalacOptions.value,
-  (scalacOptions in Test) ~= (_.filterNot(_ == "-Xfatal-warnings")),
+  (Test / scalacOptions) ~= (_.filterNot(_ == "-Xfatal-warnings")),
   addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
   libraryDependencies ++= Seq(
     "dev.zio"       %%% "zio"       % "1.0.0-RC13",
@@ -67,7 +67,7 @@ lazy val sharedSettings = Seq(
 
 lazy val publishingSettings = Seq(
   publishMavenStyle       := true,
-  publishArtifact in Test := false,
+  Test / publishArtifact := false,
   pomIncludeRepository := { _ =>
     false
   },
@@ -77,7 +77,7 @@ lazy val publishingSettings = Seq(
     else
       Opts.resolver.sonatypeStaging
   ),
-  licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+  licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT")),
   homepage := Some(url("https://github.com/takayahilton/eff-zio")),
   scmInfo := Some(
     ScmInfo(
