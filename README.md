@@ -6,19 +6,15 @@ This library is [eff](https://github.com/atnos-org/eff) extension for [ZIO](http
 
 # Installation
 
-```
+```sbt
 // check maven badge above for latest version
-libraryDependencies += "com.github.takayahilton" %% "eff-zio" % "0.1.2"
+libraryDependencies += "com.github.takayahilton" %% "eff-zio" % "1.0.0"
 
-// to write types like Reader[String, ?]
-addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.0")
+// to write types like Reader[String, *]
+addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.13.0")
 
-// to get types like Reader[String, ?] (with more than one type parameter) correctly inferred for scala 2.11.11+ and 2.12.x
+// to get types like Reader[String, *] (with more than one type parameter) correctly inferred for scala 2.12.x
 scalacOptions += "-Ypartial-unification"
-
-// to get types like Reader[String, ?] (with more than one type parameter) correctly inferred for scala 2.11.9 and before
-// you can use the [Typelevel Scala compiler](http://typelevel.org/scala)
-scalaOrganization in ThisBuild := "org.typelevel"
 ```
 
 # Usage
@@ -28,9 +24,9 @@ import com.github.takayahilton.eff.zio._
 import org.atnos.eff._
 import org.atnos.eff.all._
 import org.atnos.eff.syntax.all._
-import zio.{DefaultRuntime, UIO}
+import zio.{Runtime, UIO}
 
-object Runtime extends DefaultRuntime
+val runtime = Runtime.default
 
 type S1 = Fx.fx2[UIO, Option]
 
@@ -42,5 +38,5 @@ def action[R: _uio: _option]: Eff[R, Int] =
 
 val zio = action[S1].runOption.runAsync
 
-Runtime.unsafeRun(zio) //Some(30)
+runtime.unsafeRun(zio) // Some(30)
 ```
