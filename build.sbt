@@ -1,8 +1,8 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import ReleaseTransformations._
 
-ThisBuild / scalaVersion := "2.12.10"
-ThisBuild / crossScalaVersions := Seq("2.11.12", scalaVersion.value, "2.13.1")
+ThisBuild / scalaVersion := "2.13.6"
+ThisBuild / crossScalaVersions := Seq("2.12.13", scalaVersion.value)
 ThisBuild / organization := "com.github.takayahilton"
 Global / onChangedBuildSource := IgnoreSourceChanges
 
