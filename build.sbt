@@ -1,10 +1,10 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import ReleaseTransformations._
 
-ThisBuild / scalaVersion := "2.13.6"
+ThisBuild / scalaVersion       := "2.13.6"
 ThisBuild / crossScalaVersions := Seq("2.12.13", scalaVersion.value)
-ThisBuild / organization := "com.github.takayahilton"
-Global / onChangedBuildSource := IgnoreSourceChanges
+ThisBuild / organization       := "com.github.takayahilton"
+Global / onChangedBuildSource  := IgnoreSourceChanges
 
 lazy val root = project
   .in(file("."))
@@ -66,7 +66,7 @@ lazy val sharedSettings = Seq(
 )
 
 lazy val publishingSettings = Seq(
-  publishMavenStyle       := true,
+  publishMavenStyle      := true,
   Test / publishArtifact := false,
   pomIncludeRepository := { _ =>
     false
