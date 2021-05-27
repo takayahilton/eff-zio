@@ -57,11 +57,11 @@ lazy val sharedSettings = Seq(
   scalafmtOnCompile := true,
   scalacOptions ++= commonScalacOptions.value,
   (Test / scalacOptions) ~= (_.filterNot(_ == "-Xfatal-warnings")),
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
+  addCompilerPlugin("org.typelevel" % "kind-projector" % "0.13.0" cross CrossVersion.full),
   libraryDependencies ++= Seq(
-    "dev.zio"       %%% "zio"       % "1.0.0-RC13",
-    "org.atnos"     %%% "eff"       % "5.5.2",
-    "org.scalatest" %%% "scalatest" % "3.0.8" % "test"
+    "dev.zio"       %%% "zio"       % "1.0.8",
+    "org.atnos"     %%% "eff"       % "5.16.0",
+    "org.scalatest" %%% "scalatest" % "3.2.9" % "test"
   )
 )
 

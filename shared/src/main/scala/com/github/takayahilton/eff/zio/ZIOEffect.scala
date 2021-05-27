@@ -19,8 +19,8 @@ trait ZIOTypes {
 object ZIOTypes extends ZIOTypes
 
 trait ZIOCreation extends ZIOTypes {
-  final def fromZIO[R, ENV, E, A](zio: ZIO[ENV, E, A])(implicit member: ZIO[ENV, E, ?] |= R): Eff[R, A] =
-    send[ZIO[ENV, E, ?], R, A](zio)
+  final def fromZIO[R, ENV, E, A](zio: ZIO[ENV, E, A])(implicit member: ZIO[ENV, E, *] |= R): Eff[R, A] =
+    send[ZIO[ENV, E, *], R, A](zio)
 
   final def effectTotal[R, A](a: => A)(implicit member: UIO |= R): Eff[R, A] =
     fromZIO(ZIO.effectTotal(a))
@@ -32,7 +32,7 @@ trait ZIOCreation extends ZIOTypes {
 object ZIOCreation extends ZIOCreation
 
 trait ZIOInterpretation {
-  private def zioMonad[R, E]: MonadError[ZIO[R, E, ?], E] = new MonadError[ZIO[R, E, ?], E] {
+  private def zioMonad[R, E]: MonadError[ZIO[R, E, *], E] = new MonadError[ZIO[R, E, *], E] {
     override final def flatMap[A, B](fa: ZIO[R, E, A])(f: A => ZIO[R, E, B]): ZIO[R, E, B] = fa.flatMap(f)
 
     override final def raiseError[A](e: E): IO[E, A] = ZIO.fail(e)
@@ -48,7 +48,7 @@ trait ZIOInterpretation {
       }
   }
 
-  private def zioApplicative[R, E]: CommutativeApplicative[ZIO[R, E, ?]] = new CommutativeApplicative[ZIO[R, E, ?]] {
+  private def zioApplicative[R, E]: CommutativeApplicative[ZIO[R, E, *]] = new CommutativeApplicative[ZIO[R, E, *]] {
     final override def pure[A](x: A): ZIO[R, E, A] =
       ZIO.succeed(x)
 
@@ -68,18 +68,18 @@ trait ZIOInterpretation {
       ZIO.unit
   }
 
-  def runAsync[R, ENV, E, A](e: Eff[R, A])(implicit m: Member.Aux[ZIO[ENV, E, ?], R, NoFx]): ZIO[ENV, E, A] =
-    Eff.detachA[ZIO[ENV, E, ?], R, A, E](e)(zioMonad, zioApplicative, m)
+  def runAsync[R, ENV, E, A](e: Eff[R, A])(implicit m: Member.Aux[ZIO[ENV, E, *], R, NoFx]): ZIO[ENV, E, A] =
+    Eff.detachA[ZIO[ENV, E, *], R, A, E](e)(zioMonad, zioApplicative, m)
 
-  def runSequential[R, ENV, E, A](e: Eff[R, A])(implicit m: Member.Aux[ZIO[ENV, E, ?], R, NoFx]): ZIO[ENV, E, A] =
-    Eff.detach[ZIO[ENV, E, ?], R, A, E](e)(zioMonad, m)
+  def runSequential[R, ENV, E, A](e: Eff[R, A])(implicit m: Member.Aux[ZIO[ENV, E, *], R, NoFx]): ZIO[ENV, E, A] =
+    Eff.detach[ZIO[ENV, E, *], R, A, E](e)(zioMonad, m)
 
   import interpret.of
 
-  def either[R, ENV, E, A](e: Eff[R, A])(implicit zio: ZIO[ENV, E, ?] /= R): Eff[R, E Either A] =
-    interpret.interceptNatM[R, ZIO[ENV, E, ?], E Either ?, A](
+  def either[R, ENV, E, A](e: Eff[R, A])(implicit zio: ZIO[ENV, E, *] /= R): Eff[R, E Either A] =
+    interpret.interceptNatM[R, ZIO[ENV, E, *], E Either *, A](
       e,
-      new (ZIO[ENV, E, ?] ~> (ZIO[ENV, E, ?] of (E Either ?))#l) {
+      new (ZIO[ENV, E, *] ~> (ZIO[ENV, E, *] of (E Either *))#l) {
         def apply[X](fa: ZIO[ENV, E, X]): ZIO[ENV, E, E Either X] =
           fa.either
       }
