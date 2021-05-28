@@ -1,10 +1,15 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import ReleaseTransformations._
 
-ThisBuild / scalaVersion       := "2.13.6"
-ThisBuild / crossScalaVersions := Seq("2.12.13", scalaVersion.value)
+ThisBuild / crossScalaVersions := Seq("2.12.13", "2.13.6")
+ThisBuild / scalaVersion       := crossScalaVersions.value.last
 ThisBuild / organization       := "com.github.takayahilton"
-Global / onChangedBuildSource  := IgnoreSourceChanges
+ThisBuild / githubWorkflowBuildPreamble ++= List(
+  WorkflowStep.Sbt(List("checkFmt"), name = Some("Check formatting"))
+)
+ThisBuild / githubWorkflowPublishTargetBranches := List()
+
+Global / onChangedBuildSource := IgnoreSourceChanges
 
 lazy val root = project
   .in(file("."))
@@ -119,5 +124,5 @@ lazy val noPublishSettings = Seq(
   publishArtifact := false
 )
 
-addCommandAlias("check", ";scalafmtCheckAll;scalafmtSbtCheck")
+addCommandAlias("checkFmt", ";scalafmtCheckAll;scalafmtSbtCheck")
 addCommandAlias("fmt", ";scalafmtAll;scalafmtSbt")
