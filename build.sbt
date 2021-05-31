@@ -1,10 +1,15 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 import ReleaseTransformations._
 
-scalaVersion in ThisBuild       := "2.12.10"
-crossScalaVersions in ThisBuild := Seq("2.11.12", scalaVersion.value, "2.13.1")
-organization in ThisBuild       := "com.github.takayahilton"
-onChangedBuildSource in Global  := IgnoreSourceChanges
+ThisBuild / crossScalaVersions := Seq("2.12.13", "2.13.6")
+ThisBuild / scalaVersion       := crossScalaVersions.value.last
+ThisBuild / organization       := "com.github.takayahilton"
+ThisBuild / githubWorkflowBuildPreamble ++= List(
+  WorkflowStep.Sbt(List("checkFmt"), name = Some("Check formatting"))
+)
+ThisBuild / githubWorkflowPublishTargetBranches := List()
+
+Global / onChangedBuildSource := IgnoreSourceChanges
 
 lazy val root = project
   .in(file("."))
@@ -56,18 +61,18 @@ lazy val commonScalacOptions = Def.setting {
 lazy val sharedSettings = Seq(
   scalafmtOnCompile := true,
   scalacOptions ++= commonScalacOptions.value,
-  (scalacOptions in Test) ~= (_.filterNot(_ == "-Xfatal-warnings")),
-  addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.10.3"),
+  (Test / scalacOptions) ~= (_.filterNot(_ == "-Xfatal-warnings")),
+  addCompilerPlugin("org.typelevel" % "kind-projector" % "0.13.0" cross CrossVersion.full),
   libraryDependencies ++= Seq(
-    "dev.zio"       %%% "zio"       % "1.0.0-RC13",
-    "org.atnos"     %%% "eff"       % "5.5.2",
-    "org.scalatest" %%% "scalatest" % "3.0.8" % "test"
+    "dev.zio"       %%% "zio"       % "1.0.8",
+    "org.atnos"     %%% "eff"       % "5.16.0",
+    "org.scalatest" %%% "scalatest" % "3.2.9" % "test"
   )
 )
 
 lazy val publishingSettings = Seq(
-  publishMavenStyle       := true,
-  publishArtifact in Test := false,
+  publishMavenStyle      := true,
+  Test / publishArtifact := false,
   pomIncludeRepository := { _ =>
     false
   },
@@ -77,7 +82,7 @@ lazy val publishingSettings = Seq(
     else
       Opts.resolver.sonatypeStaging
   ),
-  licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT")),
+  licenses := Seq("MIT" -> url("https://opensource.org/licenses/MIT")),
   homepage := Some(url("https://github.com/takayahilton/eff-zio")),
   scmInfo := Some(
     ScmInfo(
@@ -119,5 +124,5 @@ lazy val noPublishSettings = Seq(
   publishArtifact := false
 )
 
-addCommandAlias("check", ";scalafmtCheckAll;scalafmtSbtCheck")
+addCommandAlias("checkFmt", ";scalafmtCheckAll;scalafmtSbtCheck")
 addCommandAlias("fmt", ";scalafmtAll;scalafmtSbt")
